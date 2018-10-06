@@ -36,13 +36,13 @@ public IAction seDeplacerVersUneTile (Map map,Player player,Point tile){
 
     //VERIF BESOIN DE RETOURNER A LA MAISON (SAC PLEIN)
     System.out.println("target"+tile.getX()+","+tile.getY());
-    if(shouldReturnHome (player)){
+    //if(shouldReturnHome (player)){
         returnHomeSess = true;
         System.out.println("JSUIS PLEIN");
         System.out.println("house"+player.getHousePosition().getX()+","+player.getHousePosition().getY());
         tile = player.getHousePosition();
 
-    }
+    //}
     //VERIF SI FARM SESS
     System.out.println("Ressources du joueur:"+player.getCarriedResource());
     if(map.getTileLeftOf(player.getPosition()).isResource()==true){
