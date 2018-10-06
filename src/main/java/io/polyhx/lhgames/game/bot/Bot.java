@@ -15,13 +15,15 @@ public class Bot extends BaseBot {
 
     Boolean returnHomeSess = false;
     boolean isStuck = false;
+    private int stuckCounter = 7;
+    
 
     public IAction getAction(Map map, Player player, List<Player> others, GameInfo info) {
 
         System.out.println("PLAYER: " + player.getPosition().getX() + "," + player.getPosition().getY());
         System.out.println(player.getCarriedResource() + " / " + player.getCapacityLevel());
 
-        if(isHome(player) && player.getTotalResource() >= 20000) {
+        if(isHome(player) && player.getTotalResource() >= 25000) {
             System.out.println("Maison");
             return createUpgradeAction(Upgrade.COLLECTING_SPEED);
         }
