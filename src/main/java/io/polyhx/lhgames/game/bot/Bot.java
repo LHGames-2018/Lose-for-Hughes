@@ -26,9 +26,9 @@ public class Bot extends BaseBot {
                 closest=tile;
             }
         }
-    return  createMeleeAttackAction(Point.LEFT);
+    //return  createMeleeAttackAction(Point.LEFT);
       
-    //return seDeplacerVersUneTile(map,player,closest.getPosition());
+    return seDeplacerVersUneTile(map,player,closest.getPosition());
     //return createMoveAction(Point.LEFT);
     }
 
