@@ -2,6 +2,7 @@ package io.polyhx.lhgames.game.bot;
 
 import io.polyhx.lhgames.game.GameInfo;
 import io.polyhx.lhgames.game.Map;
+import io.polyhx.lhgames.game.Upgrade;
 import io.polyhx.lhgames.game.tile.*;
 import io.polyhx.lhgames.game.Player;
 import io.polyhx.lhgames.game.action.IAction;
@@ -13,6 +14,7 @@ import java.util.List;
 public class Bot extends BaseBot {
 
     Boolean returnHomeSess = false;
+    int upgrade=0;
 
     public IAction getAction(Map map, Player player, List<Player> others, GameInfo info) {
 
@@ -27,7 +29,12 @@ public class Bot extends BaseBot {
             }
         }
     //return  createMeleeAttackAction(Point.LEFT);
-      
+
+      //if(upgrade==0){
+        //  upgrade++;
+          //return createUpgradeAction(Upgrade.COLLECTING_SPEED);
+      //}
+
     return seDeplacerVersUneTile(map,player,closest.getPosition());
     //return createMoveAction(Point.LEFT);
     }
@@ -36,13 +43,13 @@ public IAction seDeplacerVersUneTile (Map map,Player player,Point tile){
 
     //VERIF BESOIN DE RETOURNER A LA MAISON (SAC PLEIN)
     System.out.println("target"+tile.getX()+","+tile.getY());
-    if(shouldReturnHome (player)){
+    //if(shouldReturnHome (player)){
         returnHomeSess = true;
         System.out.println("JSUIS PLEIN");
         System.out.println("house"+player.getHousePosition().getX()+","+player.getHousePosition().getY());
         tile = player.getHousePosition();
 
-    }
+   // }
     //VERIF SI FARM SESS
     System.out.println("Ressources du joueur:"+player.getCarriedResource());
     if(map.getTileLeftOf(player.getPosition()).isResource()==true){
