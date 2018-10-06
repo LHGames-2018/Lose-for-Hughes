@@ -10,6 +10,7 @@ import io.polyhx.lhgames.game.action.IAction;
 import io.polyhx.lhgames.game.point.Point;
 
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Bot extends BaseBot {
 
@@ -17,6 +18,7 @@ public class Bot extends BaseBot {
     boolean isStuck = false;
     private int stuckCounter = 0;
     int lifePrice = 10000;
+    private LinkedBlockingQueue<IAction> actionQueue = new LinkedBlockingQueue<>();
 
 
     public IAction getAction(Map map, Player player, List<Player> others, GameInfo info) {
@@ -55,6 +57,8 @@ public class Bot extends BaseBot {
     }
 
     private IAction goTo (Map map, Player player, Point tile) {
+        if (!actionQueue.isEmpty())
+            return actionQueue.poll();
         if (stuckCounter < 2) {
             if (stuckCounter == 0)
                 {stuckCounter++; return createMoveAction(new Point(1, 0));}
@@ -77,23 +81,37 @@ public class Bot extends BaseBot {
         else {
             Point x = new Point(deltaX / Math.abs(xDiv), 0);
             Point y = new Point(0, deltaY / Math.abs(yDiv));
+            Tile t = map.getTile(player.getPosition().getX() + x.getX(), player.getPosition().getY());
+            Tile ty = map.getTile(player.getPosition().getX(), player.getPosition().getY() + y.getY());
+            
             if (deltaX != 0)
             {
                 System.out.println("X move: " + deltaX / Math.abs(xDiv) + ", " + 0);
                 
-                Tile t = map.getTile(player.getPosition().getX() + x.getX(), player.getPosition().getY());
                 if (!t.isEmpty() && !t.isHouse()) {
-                    return createMoveAction(y);
+                    Tile up = map.getTile(t.getX(), t.getY() + 1);
+                    Tile down = map.getTile(t.getX(), t.getY() - 1);
+                    Point v = up.isEmpty() ? new Point(0, -1) : new Point(0, 1); 
+                    return createMoveAction(v);
                 }
                 return createMoveAction(x);
             }
+            
             else 
             {
                 System.out.println("Y move: " + 0 +", "+ deltaY / Math.abs(yDiv));
-                // Tile t = map.getTile(player.getPosition().getX(), player.getPosition().getY() + y.getY());
-                // if (!t.isEmpty() && !t.isHouse()) {
-                //     return createMoveAction(new Point(1, 0));
-                // }
+                if (!ty.isEmpty() && !ty.isHouse()) {
+                    Tile right = map.getTile(ty.getX() + 1, ty.getY());
+                    Tile left = map.getTile(ty.getX() - 1, ty.getY());
+                    Point v1 = new Point(-1, 0);
+                    Point v2 = new Point(0, 1);
+                    if(!right.isEmpty()) {
+                        v1 = new Point(-1, 0);
+                        v2 = new Point(0, y.getY());
+                    }
+                    actionQueue.add(createMoveAction(v2));
+                    return createMoveAction(v1);
+                }
                 return createMoveAction(y);
             }
         }
