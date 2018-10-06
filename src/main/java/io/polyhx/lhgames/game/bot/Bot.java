@@ -15,16 +15,18 @@ public class Bot extends BaseBot {
 
     Boolean returnHomeSess = false;
     boolean isStuck = false;
-    private int stuckCounter = 7;
-    
+    private int stuckCounter = 0;
+    int lifePrice = 10000;
+
 
     public IAction getAction(Map map, Player player, List<Player> others, GameInfo info) {
 
         System.out.println("PLAYER: " + player.getPosition().getX() + "," + player.getPosition().getY());
         System.out.println(player.getCarriedResource() + " / " + player.getCapacityLevel());
 
-        if(isHome(player) && player.getTotalResource() >= 25000) {
+        if(isHome(player) && player.getTotalResource() >= lifePrice) {
             System.out.println("Maison");
+            lifePrice *= 2.5;
             return createUpgradeAction(Upgrade.COLLECTING_SPEED);
         }
         Tile closest = map.getTile(player.getHousePosition());
@@ -53,6 +55,11 @@ public class Bot extends BaseBot {
     }
 
     private IAction goTo (Map map, Player player, Point tile) {
+        if (stuckCounter < 2) {
+            if (stuckCounter == 0)
+                {stuckCounter++; return createMoveAction(new Point(1, 0));}
+            else {stuckCounter++; return createMoveAction(new Point(0, -1));}
+        }
         Point target = tile;
         if (shouldReturnHome(player) || isStuck)
         {
@@ -83,6 +90,10 @@ public class Bot extends BaseBot {
             else 
             {
                 System.out.println("Y move: " + 0 +", "+ deltaY / Math.abs(yDiv));
+                // Tile t = map.getTile(player.getPosition().getX(), player.getPosition().getY() + y.getY());
+                // if (!t.isEmpty() && !t.isHouse()) {
+                //     return createMoveAction(new Point(1, 0));
+                // }
                 return createMoveAction(y);
             }
         }
