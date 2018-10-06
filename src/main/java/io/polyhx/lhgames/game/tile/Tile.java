@@ -61,6 +61,7 @@ public class Tile implements IPoint {
      * @return {@code true} if it is a wall, else {@false}.
      */
     public boolean isWall() {
+        
         return (fContent == TileContent.WALL);
     }
 
