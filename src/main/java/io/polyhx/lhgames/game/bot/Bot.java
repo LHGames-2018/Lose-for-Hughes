@@ -54,7 +54,7 @@ public class Bot extends BaseBot {
 
     private boolean adjacent (int x,int y) {
         return ((x == 0 && y == 1) || (x == 1 && y == 0));
-    }
+    } 
 
     private IAction goTo (Map map, Player player, Point tile) {
         if (!actionQueue.isEmpty())
