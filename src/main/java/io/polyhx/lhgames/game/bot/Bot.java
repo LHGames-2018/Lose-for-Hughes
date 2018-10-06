@@ -26,7 +26,7 @@ public class Bot extends BaseBot {
             return createUpgradeAction(Upgrade.COLLECTING_SPEED);
         }
         Tile closest = map.getTile(player.getHousePosition());
-        if (map.getResources().isEmpty())
+        if (!map.getResources().isEmpty())
             closest = map.getResources().get(0);
         
         isStuck = true;
