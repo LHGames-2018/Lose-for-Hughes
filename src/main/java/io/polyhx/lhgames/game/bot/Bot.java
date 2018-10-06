@@ -25,15 +25,15 @@ public class Bot extends BaseBot {
         for(ResourceTile tile: map.getResources()) {
             double distance = player.getPosition().getDistanceTo(tile.getPosition());
             if (distance < closest.getDistanceTo(player.getPosition())) {
-                closest=tile;
+                if(dansRayon(player,tile.getPosition())){
+                    closest=tile;
+                }
+
             }
         }
-    //return  createMeleeAttackAction(Point.LEFT);
 
-      //if(upgrade==0){
-        //  upgrade++;
-          //return createUpgradeAction(Upgrade.COLLECTING_SPEED);
-      //}
+
+
 
     return seDeplacerVersUneTile(map,player,closest.getPosition());
     //return createMoveAction(Point.LEFT);
@@ -43,30 +43,38 @@ public IAction seDeplacerVersUneTile (Map map,Player player,Point tile){
 
     //VERIF BESOIN DE RETOURNER A LA MAISON (SAC PLEIN)
     System.out.println("target"+tile.getX()+","+tile.getY());
-    //if(shouldReturnHome (player)){
+    if(player.getHousePosition()==player.getPosition()){
+        if (upgrade==0){
+            System.out.println("upgrade");
+            upgrade++;
+            return  createUpgradeAction(Upgrade.COLLECTING_SPEED);
+
+        }
+    }
+    if(shouldReturnHome (player)){
         returnHomeSess = true;
         System.out.println("JSUIS PLEIN");
         System.out.println("house"+player.getHousePosition().getX()+","+player.getHousePosition().getY());
         tile = player.getHousePosition();
 
-   // }
+    }
     //VERIF SI FARM SESS
     System.out.println("Ressources du joueur:"+player.getCarriedResource());
-    if(map.getTileLeftOf(player.getPosition()).isResource()==true){
+    if(map.getTileLeftOf(player.getPosition()).isResource()==true && player.getCarriedResource()!=1000){
         System.out.println("JE FARM");
    
         return createCollectAction(new Point(-1,0));
        
     }
-    if(map.getTileRightOf(player.getPosition()).isResource()==true){
+    if(map.getTileRightOf(player.getPosition()).isResource()==true && player.getCarriedResource()!=1000){
         System.out.println("JE FARM");
         return createCollectAction(new Point(1,0));
     }
-    if(map.getTileAboveOf(player.getPosition()).isResource()==true){
+    if(map.getTileAboveOf(player.getPosition()).isResource()==true && player.getCarriedResource()!=1000){
         System.out.println("JE FARM UP");
         return createCollectAction(new Point(0,1));
     }
-    if(map.getTileBelowOf(player.getPosition()).isResource()==true){
+    if(map.getTileBelowOf(player.getPosition()).isResource()==true && player.getCarriedResource()!=1000){
         System.out.println("JE FARM ");
         return createCollectAction(new Point(0,-1));
     }
@@ -103,10 +111,15 @@ public IAction seDeplacerVersUneTile (Map map,Player player,Point tile){
 }
 
 
-private boolean shouldReturnHome (Player player) {
-    return player.getResourceCapacity() == player.getCarriedResource();
-}
-   // }
+    private boolean shouldReturnHome (Player player) {
+         return player.getResourceCapacity() == player.getCarriedResource();
+    }
+    private boolean dansRayon (Player player, Point poi) {
+        if (player.getHousePosition().getDistanceTo(poi) < 11.0) {
+            return true;
+        }
+        return false;
+    }
 
 }
 
