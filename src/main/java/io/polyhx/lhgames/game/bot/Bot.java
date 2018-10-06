@@ -25,9 +25,12 @@ public class Bot extends BaseBot {
             System.out.println("Maison");
             return createUpgradeAction(Upgrade.COLLECTING_SPEED);
         }
-        ResourceTile closest = map.getResources().get(0);
+        Tile closest = map.getTile(player.getHousePosition());
+        if (map.getResources().isEmpty())
+            closest = map.getResources().get(0);
+        
         isStuck = true;
-        for (ResourceTile tile : map.getResources()) {
+        for (Tile tile : map.getResources()) {
             double distance = player.getPosition().getDistanceTo(tile.getPosition());
             if (distance <= closest.getDistanceTo(player.getPosition())) {
                 if (dansRayon(player, tile.getPosition())) {
