@@ -97,7 +97,7 @@ public class Bot extends BaseBot {
                 return createMoveAction(x);
             }
             
-            else 
+            else
             {
                 System.out.println("Y move: " + 0 +", "+ deltaY / Math.abs(yDiv));
                 if (!ty.isEmpty() && !ty.isHouse()) {
