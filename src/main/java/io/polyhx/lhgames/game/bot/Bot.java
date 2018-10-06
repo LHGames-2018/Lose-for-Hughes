@@ -26,18 +26,20 @@ public class Bot extends BaseBot {
                 closest=tile;
             }
         }
-        System.out.println(closest.getX()+","+closest.getY());
+
       
     return seDeplacerVersUneTile(map,player,closest.getPosition());
-    //return createMoveAction(Point.RIGHT);
+    //return createMoveAction(Point.LEFT);
     }
 
 public IAction seDeplacerVersUneTile (Map map,Player player,Point tile){
 
     //VERIF BESOIN DE RETOURNER A LA MAISON (SAC PLEIN)
+    System.out.println("target"+tile.getX()+","+tile.getY());
     if(shouldReturnHome (player)){
         returnHomeSess = true;
         System.out.println("JSUIS PLEIN");
+        System.out.println("house"+player.getHousePosition().getX()+","+player.getHousePosition().getY());
         tile = player.getHousePosition();
 
     }
@@ -54,23 +56,33 @@ public IAction seDeplacerVersUneTile (Map map,Player player,Point tile){
         return createCollectAction(new Point(1,0));
     }
     if(map.getTileAboveOf(player.getPosition()).isResource()==true){
-        System.out.println("JE FARM");
-        return createCollectAction(new Point(0,-1));
-    }
-    if(map.getTileBelowOf(player.getPosition()).isResource()==true){
-        System.out.println("JE FARM");
+        System.out.println("JE FARM UP");
         return createCollectAction(new Point(0,1));
     }
+    if(map.getTileBelowOf(player.getPosition()).isResource()==true){
+        System.out.println("JE FARM ");
+        return createCollectAction(new Point(0,-1));
+    }
 
-
+        if(player.getPosition().getX()-tile.getX()==1){
+             return createMoveAction(Point.LEFT);
+        }
+        if(player.getPosition().getX()-tile.getX()==-1){
+            return createMoveAction(Point.RIGHT);
+        }
         if(player.getPosition().getX()-tile.getX()>1 ){
             return createMoveAction(Point.LEFT);
-        }else if(player.getPosition().getX()-tile.getX()<1){
+        }else if(player.getPosition().getX()-tile.getX()<1 && player.getPosition().getX()-tile.getX()!=0){
             return createMoveAction(Point.RIGHT);
         }
 
-        if(player.getPosition().getX()-tile.getX()==0 ||player.getPosition().getX()-tile.getX()==1){
 
+        if(player.getPosition().getX()-tile.getX()==0){
+            System.out.println("im here");
+
+            if(player.getPosition().getY()-tile.getY()==0){
+                return createMoveAction(new Point(0,0));
+            }
             if(player.getPosition().getY()-tile.getY()>=1 ){
                 return createMoveAction(Point.UP);
             }else if(player.getPosition().getY()-tile.getY()<=1){
